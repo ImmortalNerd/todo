@@ -13,6 +13,7 @@ import Checkbox from "@mui/material/Checkbox";
 export default function MultilineTextFields() {
   const [input, setInput] = useState("");
   const [task, setTask] = useState([]);
+  const [edit, setEdit] = useState(null);
   const handleChange = (e) => {
     setInput(e.target.value);
   };
@@ -22,32 +23,77 @@ export default function MultilineTextFields() {
     setInput("");
   };
 
-  const handleEdit = (i) => {
-    let cache = [...task];
-    setInput(cache[i]);
-    cache.pop();
-    setTask([...cache]);
+  const handleEdit = (item, i) => {
+    setEdit(item);
+    setInput(item);
   };
+
+  const handleDelete = (i) => {
+    setTask(task.filter((item, index) => index !== i));
+  };
+
+  const handleCancel = () => {
+    setInput("");
+    setEdit(null);
+  };
+
+  const handleSave = (input) => {
+    setTask((prev) => {
+      let cache = [...prev];
+      let index = cache.findIndex((item) => item === edit);
+      cache[index] = input;
+      return cache;
+    });
+
+    setInput("");
+    setEdit(null);
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col items-center">
-          <div>
-            <TextField
-              id="outlined-textarea"
-              label="To do task"
-              placeholder="Task..."
-              value={input}
-              onChange={handleChange}
-              multiline
-              required
-              sx={{ m: 1, width: "25rem" }}
-            />
-          </div>
-          <div className=" mt-3">
-            <Button variant="contained" type="submit">
-              Add your task
-            </Button>
+        <div className="container flex justify-center">
+          <div className="grid grid-cols-4 justify-center w-1/2 gap-2">
+            <div className="col-start-1 col-end-5">
+              <TextField
+                id="outlined-textarea"
+                label="To do task"
+                placeholder="Task..."
+                value={input}
+                onChange={handleChange}
+                multiline
+                required
+                className="w-full	"
+              />
+            </div>
+
+            <div
+              className={`col-end-4 col-span-1 mt-3 ${
+                edit ? "inline" : "hidden"
+              }`}
+            >
+              <Button variant="contained" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
+            <div
+              className={`col-end-5 col-span-1 mt-3 ${
+                edit ? "inline" : "hidden"
+              }`}
+            >
+              <Button variant="contained" onClick={() => handleSave(input)}>
+                Save
+              </Button>
+            </div>
+            <div
+              className={`col-end-5 col-span-1 mt-3 ${
+                edit ? "hidden" : "inline"
+              }`}
+            >
+              <Button variant="contained" type="submit">
+                Add
+              </Button>
+            </div>
           </div>
         </div>
       </form>
@@ -63,6 +109,7 @@ export default function MultilineTextFields() {
                 <TableCell>Task</TableCell>
                 <TableCell>Edit</TableCell>
                 <TableCell>Done</TableCell>
+                <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -75,12 +122,25 @@ export default function MultilineTextFields() {
                     <TableCell>{i + 1}</TableCell>
                     <TableCell>{item}</TableCell>
                     <TableCell>
-                      <Button variant="contained" onClick={() => handleEdit(i)}>
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={() => handleEdit(item, i)}
+                      >
                         Edit your task
                       </Button>
                     </TableCell>
                     <TableCell>
                       <Checkbox color="primary" />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="error"
+                        variant="contained"
+                        onClick={() => handleDelete(i)}
+                      >
+                        Delete your task
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );
