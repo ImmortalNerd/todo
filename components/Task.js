@@ -2,6 +2,13 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Checkbox from "@mui/material/Checkbox";
 
 export default function MultilineTextFields() {
   const [input, setInput] = useState("");
@@ -13,6 +20,13 @@ export default function MultilineTextFields() {
     e.preventDefault();
     setTask([...task, input]);
     setInput("");
+  };
+
+  const handleEdit = (i) => {
+    let cache = [...task];
+    setInput(cache[i]);
+    cache.pop();
+    setTask([...cache]);
   };
   return (
     <>
@@ -41,28 +55,39 @@ export default function MultilineTextFields() {
         <div>
           <h3 className="text-center">Task list</h3>
         </div>
-        <div className="w-1/2">
-          <table className="w-full border border-2">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Task</th>
-                <th>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
+        <TableContainer className="max-w-fit	">
+          <Table sx={{ minWidth: 650 }} aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>No.</TableCell>
+                <TableCell>Task</TableCell>
+                <TableCell>Edit</TableCell>
+                <TableCell>Done</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {task.map((item, i) => {
                 return (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{item}</td>
-                    <td> Edit </td>
-                  </tr>
+                  <TableRow
+                    key={i}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>{item}</TableCell>
+                    <TableCell>
+                      <Button variant="contained" onClick={() => handleEdit(i)}>
+                        Edit your task
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Checkbox color="primary" />
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );
