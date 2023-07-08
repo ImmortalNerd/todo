@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import TodoList from "./TodoList";
+import TaskContext from "@/contexts/TaskContext";
 
 export default function Task() {
   const [input, setInput] = useState("");
@@ -43,7 +44,7 @@ export default function Task() {
     setTask(task.filter((item, index) => index !== i));
   };
   return (
-    <>
+    <TaskContext.Provider value={{ task, handleDelete, handleEdit }}>
       <form onSubmit={handleSubmit}>
         <div className="container flex justify-center">
           <div className="grid grid-cols-4 justify-center w-1/2 gap-2">
@@ -94,13 +95,8 @@ export default function Task() {
         <div>
           <h3 className="text-center">Task list</h3>
         </div>
-        <TodoList
-          task={task}
-          input={input}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-        />
+        <TodoList />
       </div>
-    </>
+    </TaskContext.Provider>
   );
 }

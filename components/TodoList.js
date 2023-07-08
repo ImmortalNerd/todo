@@ -7,8 +7,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
+import { useContext } from "react";
+import TaskContext from "@/contexts/TaskContext";
 
-export default function TodoList({ task, handleDelete, handleEdit }) {
+export default function TodoList() {
+  const { task, handleDelete, handleEdit } = useContext(TaskContext);
   return (
     <div>
       <TableContainer className="max-w-fit	">
@@ -27,6 +30,7 @@ export default function TodoList({ task, handleDelete, handleEdit }) {
               return (
                 <TableRow
                   key={i}
+                  {...task}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>{i + 1}</TableCell>
