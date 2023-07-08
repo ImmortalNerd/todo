@@ -7,7 +7,7 @@ export default function Home() {
       <div className="container">
         <div className="flex flex-col justify-center">
           <div>
-          <h1 className="text-center">TO DO List</h1>
+            <h1 className="text-center">TO DO List</h1>
           </div>
           <div className="my-5">
             <Task />

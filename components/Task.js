@@ -2,34 +2,20 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Checkbox from "@mui/material/Checkbox";
+import TodoList from "./TodoList";
 
-export default function MultilineTextFields() {
+export default function Task() {
   const [input, setInput] = useState("");
   const [task, setTask] = useState([]);
   const [edit, setEdit] = useState(null);
   const handleChange = (e) => {
     setInput(e.target.value);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setTask([...task, input]);
     setInput("");
-  };
-
-  const handleEdit = (item, i) => {
-    setEdit(item);
-    setInput(item);
-  };
-
-  const handleDelete = (i) => {
-    setTask(task.filter((item, index) => index !== i));
   };
 
   const handleCancel = () => {
@@ -49,6 +35,13 @@ export default function MultilineTextFields() {
     setEdit(null);
   };
 
+  const handleEdit = (item, i) => {
+    setEdit(item);
+    setInput(item);
+  };
+  const handleDelete = (i) => {
+    setTask(task.filter((item, index) => index !== i));
+  };
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -101,53 +94,12 @@ export default function MultilineTextFields() {
         <div>
           <h3 className="text-center">Task list</h3>
         </div>
-        <TableContainer className="max-w-fit	">
-          <Table sx={{ minWidth: 650 }} aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>No.</TableCell>
-                <TableCell>Task</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Done</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {task.map((item, i) => {
-                return (
-                  <TableRow
-                    key={i}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell>{item}</TableCell>
-                    <TableCell>
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={() => handleEdit(item, i)}
-                      >
-                        Edit your task
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Checkbox color="primary" />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        color="error"
-                        variant="contained"
-                        onClick={() => handleDelete(i)}
-                      >
-                        Delete your task
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TodoList
+          task={task}
+          input={input}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+        />
       </div>
     </>
   );
